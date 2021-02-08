@@ -26,5 +26,12 @@ namespace Tasks.API.Controllers
         {
             return Ok(await _employeeService.GetEmployeeById(emplyeeId));
         }
+
+        [HttpGet]
+        //GET: api/Employee/
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await _employeeService.GetAll());
+        }
     }
 }

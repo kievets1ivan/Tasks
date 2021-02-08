@@ -12,6 +12,7 @@ namespace Tasks.BLL.Services
     public interface IEmployeeService
     {
         Task<EmployeeDTO> GetEmployeeById(int employeeId);
+        Task<IEnumerable<EmployeeDTO>> GetAll();
     }
 
     public class EmployeeService : IEmployeeService
@@ -35,5 +36,8 @@ namespace Tasks.BLL.Services
 
             return _mapper.Map<EmployeeDTO>(employee);
         }
+
+        public async Task<IEnumerable<EmployeeDTO>> GetAll() => _mapper.Map<IEnumerable<EmployeeDTO>>(await _employeeRepository.GetAll());
+
     }
 }

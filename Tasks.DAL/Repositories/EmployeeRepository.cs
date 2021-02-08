@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tasks.DAL.EF;
 using Tasks.DAL.Entities;
@@ -8,6 +9,7 @@ namespace Tasks.DAL.Repositories
     public interface IEmployeeRepository
     {
         Task<Employee> GetById(int employeeId, bool asNoTracking = true);
+        Task<IEnumerable<Employee>> GetAll();
     }
 
     public class EmployeeRepository : IEmployeeRepository
@@ -28,5 +30,7 @@ namespace Tasks.DAL.Repositories
 
             return await _context.Employees.SingleOrDefaultAsync(e => e.Id == employeeId);
         }
+
+        public async Task<IEnumerable<Employee>> GetAll() => await _context.Employees.AsNoTracking().ToListAsync();
     }
 }
