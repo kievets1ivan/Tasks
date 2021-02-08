@@ -1,0 +1,17 @@
+*.csproj.user
+
+.vs/
+
+Tasks.API/obj/
+
+Tasks.API/bin/
+
+Tasks.BLL/bin/
+
+Tasks.BLL/obj/
+
+Tasks.DAL/bin/
+
+Tasks.DAL/obj/
+
+Tasks.API/appsettings.json
