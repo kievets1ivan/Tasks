@@ -10,6 +10,9 @@ namespace Tasks.BLL
         {
             CreateMap<Employee, EmployeeDTO>().ReverseMap();
             CreateMap<AdditionalTask, AdditionalTaskDTO>().ReverseMap();
+            CreateMap<AdditionalTaskEmployee, AdditionalTaskEmployeeDTO>().ReverseMap();
+            CreateMap<Payment, PaymentDTO>().ReverseMap();
+            CreateMap<Check, CheckDTO>().ReverseMap();
         }
     }
 }

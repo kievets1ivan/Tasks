@@ -40,6 +40,10 @@ namespace Tasks.API
 
             services.AddAutoMapper(typeof(MapperProfile).GetTypeInfo().Assembly);
 
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tasks.API", Version = "v1" });

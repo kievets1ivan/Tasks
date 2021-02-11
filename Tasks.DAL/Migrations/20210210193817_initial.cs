@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Tasks.DAL.Migrations
 {
-    public partial class init : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -37,8 +37,8 @@ namespace Tasks.DAL.Migrations
                     EstimatedDuration = table.Column<int>(type: "int", nullable: false),
                     Complexity = table.Column<int>(type: "int", nullable: false),
                     Payment = table.Column<decimal>(type: "money", nullable: false),
-                    Start = table.Column<DateTime>(type: "smalldatetime", nullable: false),
-                    End = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    End = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsFinished = table.Column<bool>(type: "bit", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -52,30 +52,39 @@ namespace Tasks.DAL.Migrations
                 name: "AdditionalTaskEmployee",
                 columns: table => new
                 {
-                    EmployeesId = table.Column<int>(type: "int", nullable: false),
-                    TasksId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AdditionalTaskId = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AdditionalTaskEmployee", x => new { x.EmployeesId, x.TasksId });
+                    table.PrimaryKey("PK_AdditionalTaskEmployee", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AdditionalTaskEmployee_Employees_EmployeesId",
-                        column: x => x.EmployeesId,
+                        name: "FK_AdditionalTaskEmployee_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AdditionalTaskEmployee_Tasks_TasksId",
-                        column: x => x.TasksId,
+                        name: "FK_AdditionalTaskEmployee_Tasks_AdditionalTaskId",
+                        column: x => x.AdditionalTaskId,
                         principalTable: "Tasks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AdditionalTaskEmployee_TasksId",
+                name: "IX_AdditionalTaskEmployee_AdditionalTaskId",
                 table: "AdditionalTaskEmployee",
-                column: "TasksId");
+                column: "AdditionalTaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AdditionalTaskEmployee_EmployeeId",
+                table: "AdditionalTaskEmployee",
+                column: "EmployeeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

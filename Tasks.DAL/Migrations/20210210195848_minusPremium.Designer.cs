@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tasks.DAL.EF;
 
 namespace Tasks.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210210195848_minusPremium")]
+    partial class minusPremium
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,24 +92,6 @@ namespace Tasks.DAL.Migrations
                     b.ToTable("AdditionalTaskEmployee");
                 });
 
-            modelBuilder.Entity("Tasks.DAL.Entities.Check", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Checks");
-                });
-
             modelBuilder.Entity("Tasks.DAL.Entities.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -132,41 +116,12 @@ namespace Tasks.DAL.Migrations
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("money");
+
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("Tasks.DAL.Entities.Payment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("CheckId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Reward")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("TaskTitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CheckId");
-
-                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("Tasks.DAL.Entities.AdditionalTaskEmployee", b =>
@@ -188,21 +143,9 @@ namespace Tasks.DAL.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("Tasks.DAL.Entities.Payment", b =>
-                {
-                    b.HasOne("Tasks.DAL.Entities.Check", null)
-                        .WithMany("Payments")
-                        .HasForeignKey("CheckId");
-                });
-
             modelBuilder.Entity("Tasks.DAL.Entities.AdditionalTask", b =>
                 {
                     b.Navigation("TaskEmployees");
-                });
-
-            modelBuilder.Entity("Tasks.DAL.Entities.Check", b =>
-                {
-                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("Tasks.DAL.Entities.Employee", b =>

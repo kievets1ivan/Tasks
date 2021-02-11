@@ -18,12 +18,10 @@ namespace Tasks.DAL.Entities
         [Required]
         [Column(TypeName = "money")]
         public decimal Payment { get; set; }
-        [Column(TypeName = "smalldatetime")]
         public DateTime Start { get; set; }
-        [Column(TypeName = "smalldatetime")]
         public DateTime End { get; set; }
         public bool IsFinished { get; set; }
 
-        public IEnumerable<Employee> Employees { get; private set; }
+        public IEnumerable<AdditionalTaskEmployee> TaskEmployees { get; private set; }
     }
 }

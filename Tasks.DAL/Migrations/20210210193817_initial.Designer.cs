@@ -10,8 +10,8 @@ using Tasks.DAL.EF;
 namespace Tasks.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20210208211712_init")]
-    partial class init
+    [Migration("20210210193817_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,21 +20,6 @@ namespace Tasks.DAL.Migrations
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
-
-            modelBuilder.Entity("AdditionalTaskEmployee", b =>
-                {
-                    b.Property<int>("EmployeesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TasksId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EmployeesId", "TasksId");
-
-                    b.HasIndex("TasksId");
-
-                    b.ToTable("AdditionalTaskEmployee");
-                });
 
             modelBuilder.Entity("Tasks.DAL.Entities.AdditionalTask", b =>
                 {
@@ -53,7 +38,7 @@ namespace Tasks.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("End")
-                        .HasColumnType("smalldatetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("EstimatedDuration")
                         .HasColumnType("int");
@@ -68,7 +53,7 @@ namespace Tasks.DAL.Migrations
                         .HasColumnType("money");
 
                     b.Property<DateTime>("Start")
-                        .HasColumnType("smalldatetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -77,6 +62,34 @@ namespace Tasks.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("Tasks.DAL.Entities.AdditionalTaskEmployee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("AdditionalTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdditionalTaskId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("AdditionalTaskEmployee");
                 });
 
             modelBuilder.Entity("Tasks.DAL.Entities.Employee", b =>
@@ -114,19 +127,33 @@ namespace Tasks.DAL.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("AdditionalTaskEmployee", b =>
+            modelBuilder.Entity("Tasks.DAL.Entities.AdditionalTaskEmployee", b =>
                 {
-                    b.HasOne("Tasks.DAL.Entities.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("EmployeesId")
+                    b.HasOne("Tasks.DAL.Entities.AdditionalTask", "AdditionalTask")
+                        .WithMany("TaskEmployees")
+                        .HasForeignKey("AdditionalTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tasks.DAL.Entities.AdditionalTask", null)
-                        .WithMany()
-                        .HasForeignKey("TasksId")
+                    b.HasOne("Tasks.DAL.Entities.Employee", "Employee")
+                        .WithMany("TaskEmployees")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AdditionalTask");
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Tasks.DAL.Entities.AdditionalTask", b =>
+                {
+                    b.Navigation("TaskEmployees");
+                });
+
+            modelBuilder.Entity("Tasks.DAL.Entities.Employee", b =>
+                {
+                    b.Navigation("TaskEmployees");
                 });
 #pragma warning restore 612, 618
         }

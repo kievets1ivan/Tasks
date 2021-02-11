@@ -21,6 +21,9 @@ namespace Tasks.DAL.EF
 
         public DbSet<AdditionalTask> Tasks { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<AdditionalTaskEmployee> AdditionalTaskEmployee { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Check> Checks { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tasks.BLL.DTOs;
 using Tasks.BLL.Filters;
 using Tasks.BLL.Services;
 
@@ -20,18 +21,39 @@ namespace Tasks.API.Controllers
             _employeeService = employeeService;
         }
 
-        [HttpGet("{emplyeeId}")]
-        //GET: api/Employee/{emplyeeId}
-        public async Task<IActionResult> GetById([FromRoute] int emplyeeId)
+        [HttpGet("{employeeId}")]
+        //GET: api/Employee/{employeeId}
+        public async Task<IActionResult> GetById([FromRoute] int employeeId)
         {
-            return Ok(await _employeeService.GetEmployeeById(emplyeeId));
+            return Ok(await _employeeService.GetEmployeeById(employeeId));
         }
 
         [HttpGet]
-        //GET: api/Employee/
+        //GET: api/Employee
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _employeeService.GetAll());
+        }
+
+        [HttpPost]
+        //POST: api/Employee
+        public async Task<IActionResult> Create([FromBody] EmployeeDTO employeeDTO)
+        {
+            return Ok(await _employeeService.AddEmployee(employeeDTO));
+        }
+
+        [HttpPut]
+        //PUT: api/Employee
+        public async Task<IActionResult> Update([FromBody] EmployeeDTO employeeDTO)
+        {
+            return Ok(await _employeeService.UpdateEmployee(employeeDTO));
+        }
+
+        [HttpDelete("{employeeId}")]
+        //DELETE: api/Employee/{employeeId}
+        public async Task<IActionResult> Delete([FromRoute] int employeeId)
+        {
+            return Ok(await _employeeService.DeleteEmployeeById(employeeId));
         }
     }
 }
