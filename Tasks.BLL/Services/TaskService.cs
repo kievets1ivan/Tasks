@@ -10,6 +10,7 @@ using Tasks.BLL.Models;
 using Tasks.DAL.EF;
 using Tasks.DAL.Entities;
 using Tasks.DAL.Repositories;
+using Tasks.DAL.Services;
 
 namespace Tasks.BLL.Services
 {
@@ -28,17 +29,17 @@ namespace Tasks.BLL.Services
         private readonly ITaskRepository _taskRepository;
         private readonly IMapper _mapper;
         private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly ICheckRepository _checkRepository;
+        private readonly IDbTransactionService _dbTransactionService;
 
         public TaskService(ITaskRepository taskRepository,
                            IMapper mapper,
                            IDateTimeProvider dateTimeProvider,
-                           ICheckRepository checkRepository)
+                           IDbTransactionService dbTransactionService)
         {
             _taskRepository = taskRepository;
             _mapper = mapper;
             _dateTimeProvider = dateTimeProvider;
-            _checkRepository = checkRepository;
+            _dbTransactionService = dbTransactionService;
         }
 
         public async Task<AdditionalTaskDTO> GetTaskById(int taskId)
@@ -75,45 +76,60 @@ namespace Tasks.BLL.Services
             var task = await _taskRepository.GetById(taskId, false);
 
             if (task == null)
-                throw new ArgumentNullException(nameof(task));
+                throw new TaskNotFoundException();
 
             return await _taskRepository.Delete(task);
         }
 
         public async Task<IEnumerable<AdditionalTaskDTO>> DoTasks(IEnumerable<int> tasksIds, TaskInputParameters request)
         {
-            if (tasksIds == null)
-                throw new ArgumentNullException(nameof(tasksIds));
-
-
-            var tasks = await _taskRepository.GetByIds(tasksIds, false, false);
-
-            if (tasks == null)
-                throw new TaskNotFoundException();
-
-            if (tasks.Count() != tasksIds.Count())
-                throw new Exception("Some tasks have already finished or they are not existed");
-
-            tasks.ToList().ForEach(task =>
+            _dbTransactionService.BeginTransaction();
+            try
             {
-                if (request.IsStarted.HasValue)
-                {
-                    if (request.IsStarted.Value)
-                    {
-                        task.Start = _dateTimeProvider.GetCurrentUTC;
-                    }
-                }
-                else if (request.IsFinished.HasValue)
-                {
-                    if (request.IsFinished.Value)
-                    {
-                        task.End = _dateTimeProvider.GetCurrentUTC;
-                        task.IsFinished = true;
-                    }
-                }
-            });
+                if (tasksIds == null)
+                    throw new ArgumentNullException(nameof(tasksIds));
 
-            return _mapper.Map<IEnumerable<AdditionalTaskDTO>>(await _taskRepository.Update(tasks));
+
+                var tasks = await _taskRepository.GetByIds(tasksIds, false, false);
+
+                if (tasks == null)
+                    throw new TaskNotFoundException();
+
+                if (tasks.Count() != tasksIds.Count())
+                    throw new Exception("Some tasks have already finished or they are not existed");
+
+                tasks.ToList().ForEach(task =>
+                {
+                    if (request.IsStarted.HasValue)
+                    {
+                        if (request.IsStarted.Value)
+                        {
+                            task.Start = _dateTimeProvider.GetCurrentUTC;
+                        }
+                    }
+                    else if (request.IsFinished.HasValue)
+                    {
+                        if (request.IsFinished.Value)
+                        {
+                            task.End = _dateTimeProvider.GetCurrentUTC;
+                            task.IsFinished = true;
+                        }
+                    }
+                });
+
+                _dbTransactionService.Commit();
+
+                return _mapper.Map<IEnumerable<AdditionalTaskDTO>>(await _taskRepository.Update(tasks));
+            }
+            catch
+            {
+                _dbTransactionService.RollBack();
+                throw;
+            }
+            finally
+            {
+                _dbTransactionService.Dispose();
+            }
         }
     }
 }

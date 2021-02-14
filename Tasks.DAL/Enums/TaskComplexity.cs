@@ -4,6 +4,6 @@
     {
         Easy,
         Medium,
-        Strtong
+        Strong
     }
 }

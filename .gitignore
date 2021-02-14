@@ -15,3 +15,13 @@ Tasks.DAL/bin/
 Tasks.DAL/obj/
 
 Tasks.API/appsettings.json
+
+Tasks.UnitTests/bin/
+
+Tasks.UnitTests/obj/
+
+Tasks.IntegrationTests/bin/
+
+Tasks.IntegrationTests/obj/
+
+Tasks.IntegrationTests/testsettings.json
