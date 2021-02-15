@@ -90,7 +90,7 @@ namespace Tasks.UnitTests.ServiceTests
 
         [Fact]
         public async Task Should_Throw_Exception_On_Null_AdditionalTaskDTO_For_UpdateTask()
-        {
+        { 
             var taskRepository = new Mock<ITaskRepository>();
             var dateTimeProvider = new Mock<IDateTimeProvider>();
             var dbTransactionService = new Mock<IDbTransactionService>();

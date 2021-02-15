@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,7 @@ using Tasks.BLL.Services;
 namespace Tasks.API.Controllers
 {
     [ServiceFilter(typeof(CustomExceptionFilterAttribute))]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskController : ControllerBase

@@ -16,11 +16,13 @@ namespace Tasks.API.Configs
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IDbTransactionService, DbTransactionService>();
             services.AddScoped<ICheckService, CheckService>();
+            services.AddScoped<IUserService, UserService>();
 
             //repositories
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ICheckRepository, CheckRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             //providers
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();

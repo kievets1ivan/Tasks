@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using Tasks.DAL.Entities;
 
 namespace Tasks.DAL.EF
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : IdentityDbContext<IdentityUser>
     {
         private readonly IDateTimeProvider _dateTimeProvider;
 
