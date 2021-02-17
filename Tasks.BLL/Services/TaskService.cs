@@ -21,7 +21,7 @@ namespace Tasks.BLL.Services
         Task<IEnumerable<AdditionalTaskDTO>> GetAll();
         Task<AdditionalTaskDTO> GetTaskById(int taskId);
         Task<AdditionalTaskDTO> UpdateTask(AdditionalTaskDTO taskDTO);
-        Task<IEnumerable<AdditionalTaskDTO>> DoTasks(IEnumerable<int> tasksIds, TaskInputParameters request);
+        Task<IEnumerable<AdditionalTaskDTO>> DoTasks(IEnumerable<int> tasksIds);
     }
 
     public class TaskService : ITaskService
@@ -81,14 +81,13 @@ namespace Tasks.BLL.Services
             return await _taskRepository.Delete(task);
         }
 
-        public async Task<IEnumerable<AdditionalTaskDTO>> DoTasks(IEnumerable<int> tasksIds, TaskInputParameters request)
+        public async Task<IEnumerable<AdditionalTaskDTO>> DoTasks(IEnumerable<int> tasksIds)
         {
             _dbTransactionService.BeginTransaction();
             try
             {
                 if (tasksIds == null)
                     throw new ArgumentNullException(nameof(tasksIds));
-
 
                 var tasks = await _taskRepository.GetByIds(tasksIds, false, false);
 
@@ -100,20 +99,16 @@ namespace Tasks.BLL.Services
 
                 tasks.ToList().ForEach(task =>
                 {
-                    if (request.IsStarted.HasValue)
+                    if (task.Start.Year == 1)
                     {
-                        if (request.IsStarted.Value)
-                        {
-                            task.Start = _dateTimeProvider.GetCurrentUTC;
-                        }
+                        task.Start = _dateTimeProvider.GetCurrentUTC;
+                        task.IsStarted = true;
                     }
-                    else if (request.IsFinished.HasValue)
+                    else if (task.Start.Year != 1 && task.End.Year == 1)
                     {
-                        if (request.IsFinished.Value)
-                        {
-                            task.End = _dateTimeProvider.GetCurrentUTC;
-                            task.IsFinished = true;
-                        }
+                        task.End = _dateTimeProvider.GetCurrentUTC;
+                        task.IsFinished = true;
+                        task.IsStarted = false;
                     }
                 });
 

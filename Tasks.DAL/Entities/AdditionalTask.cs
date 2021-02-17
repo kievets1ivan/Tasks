@@ -21,6 +21,7 @@ namespace Tasks.DAL.Entities
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public bool IsFinished { get; set; }
+        public bool IsStarted { get; set; }
 
         public IEnumerable<AdditionalTaskEmployee> TaskEmployees { get; private set; }
     }

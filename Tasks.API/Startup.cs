@@ -91,7 +91,7 @@ namespace Tasks.API
             }
 
             app.UseCors(builder =>
-            builder.WithOrigins("http://localhost:4200", "https://localhost:4200")
+            builder.WithOrigins("http://localhost:8080")
             .AllowCredentials()
             .AllowAnyHeader()
             .AllowAnyMethod());

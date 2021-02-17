@@ -60,12 +60,11 @@ namespace Tasks.API.Controllers
             return Ok(await _taskService.DeleteTaskById(taskId));
         }
 
-
         [HttpPut("do")]
         //PUT: api/Task/do
-        public async Task<IActionResult> DoTasks([FromBody] IEnumerable<int> tasksIds, [FromQuery] TaskInputParameters parameters)
+        public async Task<IActionResult> DoTasks([FromBody] IEnumerable<int> tasksIds)
         {
-            return Ok(await _taskService.DoTasks(tasksIds, parameters));
+            return Ok(await _taskService.DoTasks(tasksIds));
         }
     }
 }

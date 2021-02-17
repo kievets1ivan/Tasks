@@ -65,7 +65,7 @@ namespace Tasks.BLL.Services
             var employee = await _employeeRepository.GetById(employeeId, false);
 
             if (employee == null)
-                throw new ArgumentNullException(nameof(employee));
+                throw new EmployeeNotFoundException(nameof(employee));
 
             return await _employeeRepository.Delete(employee);
         }
