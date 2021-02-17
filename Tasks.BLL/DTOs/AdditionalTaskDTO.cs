@@ -16,6 +16,7 @@ namespace Tasks.BLL.DTOs
         public DateTime End { get; set; }
         public bool IsFinished { get; set; }
         public bool IsStarted { get; set; }
+        public bool IsPaid { get; set; }
 
         public IEnumerable<AdditionalTaskEmployeeDTO> TaskEmployees { get; set; }
     }

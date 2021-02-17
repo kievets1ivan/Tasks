@@ -15,6 +15,7 @@ namespace Tasks.DAL.Entities
         [Required]
         [Range(18, 80, ErrorMessage = "Invalid age(18-80)")]
         public int Age { get; set; }
+        public decimal Salary { get; set; }
 
         public IEnumerable<AdditionalTaskEmployee> TaskEmployees { get; private set; }
     }

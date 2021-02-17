@@ -76,7 +76,10 @@ namespace Tasks.BLL.Services
                         Reward = taskEmployee.AdditionalTask.Payment
                     });
                 }
+                task.IsPaid = true;
             }
+            await _taskRepository.Update(tasks);
+
 
             return _mapper.Map<CheckDTO>(await _checkRepository.Create(check));
         }
